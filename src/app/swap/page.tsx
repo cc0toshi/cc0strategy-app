@@ -388,7 +388,29 @@ export default function SwapPage() {
         <h1 className="font-editorial headline-lg">SWAP TOKENS</h1>
       </div>
       
-      <div className="max-w-lg">
+      <div className="grid lg:grid-cols-2 gap-8 max-w-5xl">
+        {/* GeckoTerminal Chart */}
+        <div className="border-2 border-white hidden lg:block">
+          <div className="border-b-2 border-white p-4">
+            <span className="font-editorial text-sm uppercase tracking-widest">PRICE CHART</span>
+          </div>
+          {selectedToken ? (
+            <iframe
+              src={`https://www.geckoterminal.com/base/pools/${selectedToken.address}?embed=1&info=0&swaps=0`}
+              width="100%"
+              height="450"
+              frameBorder="0"
+              className="bg-black"
+              title="Price Chart"
+            />
+          ) : (
+            <div className="h-[450px] flex items-center justify-center text-neutral-600 text-sm">
+              Select a token to view chart
+            </div>
+          )}
+        </div>
+
+        {/* Swap Interface */}
         <div className="border-2 border-white">
           {!isConnected ? (
             <div className="p-12 text-center">
