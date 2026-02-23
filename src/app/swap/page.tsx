@@ -289,7 +289,7 @@ export default function SwapPage() {
       // Actions: SWAP_EXACT_IN_SINGLE (0x06), SETTLE_ALL (0x0c), TAKE_ALL (0x0f)
       const actions = '0x060c0f' as `0x${string}`;
       
-      // Swap params
+      // Swap params - Universal Router uses uint128 amountIn (positive), not int128
       const swapParams = encodeAbiParameters(
         [
           { type: 'tuple', components: [
@@ -300,12 +300,12 @@ export default function SwapPage() {
             { name: 'hooks', type: 'address' },
           ]},
           { type: 'bool' },    // zeroForOne
-          { type: 'int128' },  // amountSpecified (NEGATIVE = exact input in V4)
+          { type: 'uint128' }, // amountIn (positive - Universal Router handles sign internally)
           { type: 'uint128' }, // amountOutMinimum
           { type: 'uint160' }, // sqrtPriceLimitX96
           { type: 'bytes' },   // hookData
         ],
-        [poolKey, zeroForOne, -amountIn, minAmountOut, sqrtPriceLimitX96, hookData]
+        [poolKey, zeroForOne, amountIn, minAmountOut, sqrtPriceLimitX96, hookData]
       );
       
       // SETTLE_ALL: settle WETH (currency1) - pulls from router balance (from WRAP_ETH)
