@@ -396,15 +396,15 @@ export default function SwapPage() {
           </div>
           {selectedToken ? (
             <iframe
-              src={`https://www.geckoterminal.com/base/pools/${selectedToken.address}?embed=1&info=0&swaps=0`}
+              src={`https://www.geckoterminal.com/base/pools/${selectedToken.address}?embed=1&info=0&swaps=1&grayscale=1`}
               width="100%"
-              height="450"
+              height="600"
               frameBorder="0"
               className="bg-black"
               title="Price Chart"
             />
           ) : (
-            <div className="h-[450px] flex items-center justify-center text-neutral-600 text-sm">
+            <div className="h-[600px] flex items-center justify-center text-neutral-600 text-sm">
               Select a token to view chart
             </div>
           )}
