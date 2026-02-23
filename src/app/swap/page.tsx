@@ -300,12 +300,12 @@ export default function SwapPage() {
             { name: 'hooks', type: 'address' },
           ]},
           { type: 'bool' },    // zeroForOne
-          { type: 'int128' },  // amountSpecified (positive = exact input)
+          { type: 'int128' },  // amountSpecified (NEGATIVE = exact input in V4)
           { type: 'uint128' }, // amountOutMinimum
           { type: 'uint160' }, // sqrtPriceLimitX96
           { type: 'bytes' },   // hookData
         ],
-        [poolKey, zeroForOne, amountIn, minAmountOut, sqrtPriceLimitX96, hookData]
+        [poolKey, zeroForOne, -amountIn, minAmountOut, sqrtPriceLimitX96, hookData]
       );
       
       // SETTLE_ALL: settle WETH (currency1) - pulls from router balance (from WRAP_ETH)
