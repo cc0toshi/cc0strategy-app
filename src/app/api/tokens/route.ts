@@ -36,16 +36,25 @@ export async function GET(request: Request) {
 
     const data = await response.json();
     
-    // Transform pool_id from bytea to hex string if needed
+    // Transform pool_id from bytea to proper 0x hex string
     if (data.tokens && Array.isArray(data.tokens)) {
-      data.tokens = data.tokens.map((token: any) => ({
-        ...token,
-        pool_id: token.pool_id 
-          ? (typeof token.pool_id === 'string' 
-              ? token.pool_id 
-              : `0x${Buffer.from(token.pool_id).toString('hex')}`)
-          : null,
-      }));
+      data.tokens = data.tokens.map((token: any) => {
+        let poolId = token.pool_id;
+        if (poolId) {
+          if (typeof poolId === 'string') {
+            // Handle postgres escaped bytea format (\\x prefix)
+            if (poolId.startsWith('\\x')) {
+              poolId = '0x' + poolId.slice(2);
+            } else if (!poolId.startsWith('0x')) {
+              poolId = '0x' + poolId;
+            }
+          } else {
+            // Handle Buffer format
+            poolId = `0x${Buffer.from(poolId).toString('hex')}`;
+          }
+        }
+        return { ...token, pool_id: poolId };
+      });
     }
     
     return NextResponse.json(data);

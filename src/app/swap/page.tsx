@@ -249,13 +249,30 @@ export default function SwapPage() {
         if (data.tokens && Array.isArray(data.tokens) && data.tokens.length > 0) {
           const chainTokens = data.tokens
             .filter((t: any) => t && t.address && t.pool_id) // Must have address AND pool_id
-            .map((t: any) => ({
-              address: t.address as `0x${string}`,
-              symbol: t.symbol || 'UNKNOWN',
-              name: t.name || 'Unknown Token',
-              poolId: (typeof t.pool_id === 'string' ? t.pool_id : `0x${Buffer.from(t.pool_id).toString('hex')}`) as `0x${string}`,
-              chain: t.chain || 'base',
-            }));
+            .map((t: any) => {
+              // Convert pool_id to proper 0x format
+              // API may return: "0x123..." or "\\x123..." (postgres bytea escape)
+              let poolIdHex: string = t.pool_id;
+              if (typeof poolIdHex === 'string') {
+                // Handle postgres escaped bytea format
+                if (poolIdHex.startsWith('\\x')) {
+                  poolIdHex = '0x' + poolIdHex.slice(2);
+                } else if (!poolIdHex.startsWith('0x')) {
+                  poolIdHex = '0x' + poolIdHex;
+                }
+              } else {
+                // Handle Buffer/array format
+                poolIdHex = `0x${Buffer.from(poolIdHex).toString('hex')}`;
+              }
+              
+              return {
+                address: t.address as `0x${string}`,
+                symbol: t.symbol || 'UNKNOWN',
+                name: t.name || 'Unknown Token',
+                poolId: poolIdHex as `0x${string}`,
+                chain: t.chain || 'base',
+              };
+            });
           
           if (chainTokens.length > 0) {
             setTokens(chainTokens);
@@ -535,7 +552,27 @@ export default function SwapPage() {
 
   // Build and execute swap
   const handleSwap = async () => {
-    if (!address || !selectedToken || !quoteAmount || !chainContracts.HOOK || !chainContracts.WETH || !chainContracts.UNIVERSAL_ROUTER) return;
+    console.log('handleSwap called', {
+      address,
+      selectedToken: selectedToken?.address,
+      quoteAmount,
+      hook: chainContracts?.HOOK,
+      weth: chainContracts?.WETH,
+      router: chainContracts?.UNIVERSAL_ROUTER,
+      chain: currentChain,
+    });
+    
+    if (!address || !selectedToken || !quoteAmount || !chainContracts?.HOOK || !chainContracts?.WETH || !chainContracts?.UNIVERSAL_ROUTER) {
+      console.log('handleSwap early return - missing:', {
+        address: !address,
+        selectedToken: !selectedToken,
+        quoteAmount: !quoteAmount,
+        hook: !chainContracts?.HOOK,
+        weth: !chainContracts?.WETH,
+        router: !chainContracts?.UNIVERSAL_ROUTER,
+      });
+      return;
+    }
     
     setError(null);
     
@@ -590,6 +627,14 @@ export default function SwapPage() {
         
         const commands = '0x0b10' as `0x${string}`;
         const inputs = [wrapEthInput, v4SwapInput];
+        
+        console.log('Executing BUY swap', {
+          router: chainContracts.UNIVERSAL_ROUTER,
+          commands,
+          inputsLength: inputs.length,
+          value: amountIn.toString(),
+          poolKey,
+        });
         
         writeContract({
           address: chainContracts.UNIVERSAL_ROUTER,
