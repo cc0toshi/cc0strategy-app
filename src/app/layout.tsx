@@ -18,6 +18,9 @@ const ibmPlex = IBM_Plex_Sans({
 });
 
 export const metadata: Metadata = {
+  other: {
+    'base:app_id': '69a0701e8c54300740ae2074',
+  },
   title: 'CC0STRATEGY — NFT-Powered Token Launchpad',
   description: 'Launch tokens where trading fees flow directly to NFT holders. Built on Uniswap V4.',
   openGraph: {
