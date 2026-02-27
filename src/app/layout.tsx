@@ -75,6 +75,9 @@ export default function RootLayout({
                   
                   {/* Desktop Navigation Links */}
                   <div className="hidden md:flex items-center gap-8">
+                    <Link href="/marketplace" className="font-editorial text-sm uppercase tracking-widest hover:opacity-60 transition-opacity link-underline">
+                      Marketplace
+                    </Link>
                     <Link href="/browse" className="font-editorial text-sm uppercase tracking-widest hover:opacity-60 transition-opacity link-underline">
                       Browse
                     </Link>
@@ -87,6 +90,9 @@ export default function RootLayout({
                     <Link href="/deploy" className="font-editorial text-sm uppercase tracking-widest hover:opacity-60 transition-opacity link-underline">
                       Deploy
                     </Link>
+                    <a href="https://dexscreener.com/base/0x4295d44f957cf5bd11b7931761fcfad16e82e04b1cb75c86a72c6b9695c8e731" target="_blank" rel="noopener noreferrer" className="font-editorial text-sm uppercase tracking-widest text-green-400 hover:text-green-300 transition-colors link-underline">
+                      CC0COMPANY
+                    </a>
                     <Link href="/docs" className="font-editorial text-sm uppercase tracking-widest text-neutral-500 hover:text-white transition-colors link-underline">
                       Docs
                     </Link>
@@ -115,11 +121,13 @@ export default function RootLayout({
                         </svg>
                       </summary>
                       <div className="absolute right-0 top-full mt-2 w-48 bg-black border-2 border-white z-50">
+                        <Link href="/marketplace" className="block px-4 py-3 text-sm uppercase tracking-wider border-b border-neutral-800 hover:bg-white hover:text-black transition-colors">Marketplace</Link>
                         <Link href="/browse" className="block px-4 py-3 text-sm uppercase tracking-wider border-b border-neutral-800 hover:bg-white hover:text-black transition-colors">Browse</Link>
                         <Link href="/swap" className="block px-4 py-3 text-sm uppercase tracking-wider border-b border-neutral-800 hover:bg-white hover:text-black transition-colors">Trade</Link>
                         <Link href="/claim" className="block px-4 py-3 text-sm uppercase tracking-wider border-b border-neutral-800 hover:bg-white hover:text-black transition-colors">Claim</Link>
                         <Link href="/portfolio" className="block px-4 py-3 text-sm uppercase tracking-wider border-b border-neutral-800 hover:bg-white hover:text-black transition-colors">Portfolio</Link>
                         <Link href="/deploy" className="block px-4 py-3 text-sm uppercase tracking-wider border-b border-neutral-800 hover:bg-white hover:text-black transition-colors">Deploy</Link>
+                        <a href="https://dexscreener.com/base/0x4295d44f957cf5bd11b7931761fcfad16e82e04b1cb75c86a72c6b9695c8e731" target="_blank" rel="noopener noreferrer" className="block px-4 py-3 text-sm uppercase tracking-wider text-green-400 border-b border-neutral-800 hover:bg-white hover:text-black transition-colors">CC0COMPANY</a>
                         <Link href="/docs" className="block px-4 py-3 text-sm uppercase tracking-wider text-neutral-500 hover:bg-white hover:text-black transition-colors">Docs</Link>
                       </div>
                     </details>
